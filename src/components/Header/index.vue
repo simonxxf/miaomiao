@@ -1,7 +1,7 @@
 <template>
   <div>
     <header id="header">
-        <h1>喵喵影院</h1>
+        <h1>{{title}}</h1>
     </header>
   </div>
 </template>
@@ -11,7 +11,10 @@ export default {
   name:"Header",
   components:{},
   props:{
-
+    title:{
+      type:String,
+      default:"喵喵电影"
+    }
   },
   data(){
     return {
