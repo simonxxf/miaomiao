@@ -1,10 +1,18 @@
 <template>
-  <div>eeee</div>
+  <div>
+    <Header></Header>
+    <TabBar></TabBar>
+  </div>
 </template>
 
 <script>
+import Header from '@/components/Header';
+import TabBar from '@/components/TabBar'
 export default {
-  components:{},
+  components:{
+     Header,
+    TabBar
+  },
   props:{},
   data(){
     return {
