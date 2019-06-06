@@ -7,12 +7,12 @@
 
 <script>
 import Header from '@/components/Header';
-import TabBar from '@/components/TabBar';
+import TabBar from '@/components/TabBar'
 export default {
   name:"Movie",
   components:{
     Header,
-        TabBar
+      TabBar
   },
   props:{},
   data(){
