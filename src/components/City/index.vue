@@ -1,12 +1,13 @@
 <template>
   <div class="city_body">
       <div class="city_list">
-        <Scroller ref="city_List">
+        <Loading v-if="isLoading"></Loading>
+        <Scroller v-else ref="city_List">
           <div>
             <div class="city_hot">
               <h2>热门城市</h2>
               <ul class="clearfix">
-                <li v-for="item in hotList" :key="item.id">{{item.nm}}</li>
+                <li v-for="item in hotList" :key="item.id" @tap="handleToCity(item.nm,item.id)">{{item.nm}}</li>
                 
               </ul>
             </div>
@@ -14,7 +15,7 @@
               <div v-for="item in cityList " :key="item.index">
                 <h2>{{item.index}}</h2>
                 <ul>
-                  <li v-for="itemList in item.list" :key="itemList.id">{{itemList.nm}}</li>
+                  <li v-for="itemList in item.list" :key="itemList.id" @tap="handleToCity(itemList.nm,itemList.id)" >{{itemList.nm}}</li>
                 </ul>
               </div>
               
@@ -38,6 +39,7 @@ export default {
     return {
       cityList : [],
       hotList : [],
+      isLoading: true
     }
   },
   methods : {
@@ -90,7 +92,8 @@ export default {
           console.log(cityList)
         return {
             cityList,
-            hotList
+            hotList,
+            
             
         };
       
@@ -101,23 +104,43 @@ export default {
       // this.$refs.city_sort.parentNode.scrollTop = h2[index].offsetTop
       this.$refs.city_List.toScrollTop(-h2[index].offsetTop);
       
+    },
+    handleToCity(nm,id){
+      this.$store.commit('city/CITY_INFO',{nm,id})
+      window.localStorage.setItem('nowNm',nm);
+      window.localStorage.setItem('nowId',id);
+      //记录当前选择城市的名字和id  
+      this.$router.push('/movie/nowPlaying')
     }
         
   },
   mounted(){
-    this.axios.get('/api/cityList').then((res)=>{
+    var cityList = window.localStorage.getItem('cityList');
+    //将存放到localStorage中的已请求的数据取出  不用再次请求
+    var hotList = window.localStorage.getItem('hotList');
+    if(cityList && hotList){
+      this.cityList = JSON.parse(cityList);
+      //将被转化成字符串的数据  使用JSON.parse转化回来
+      this.hotList = JSON.parse(hotList);
+      this.isLoading = false;
+    }else{
+      this.axios.get('/api/cityList').then((res)=>{
         var msg = res.data.msg;
         if(msg === 'ok'){
+            this.isLoading = false
             // this.isLoading = false;
             var cities = res.data.data.cities;
             //[ { index : 'A' , list : [{ nm : '阿城' , id : 123 }] } ]
             var { cityList , hotList } = this.formatCityList(cities);
             this.cityList = cityList;
             this.hotList = hotList;
-            // window.localStorage.setItem('cityList' , JSON.stringify(cityList));
-            // window.localStorage.setItem('hotList' , JSON.stringify(hotList));
+            window.localStorage.setItem('cityList' , JSON.stringify(cityList));
+            //将获取到的cityList存放到本地的localStorage(只存放字符串) JSON.stringify将获取到的数据转化为字符串
+             window.localStorage.setItem('hotList' , JSON.stringify(hotList));
         }
     });
+    }
+    
   },
  
 }

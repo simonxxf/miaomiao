@@ -1,5 +1,7 @@
 <template>
   <div class="cinema_body" ref="cinema_body">
+    <Loading v-if="isLoading"></Loading>
+    <Scroller v-else>
     <ul>
       <li v-for="item in cinemaList" :key="item.id">
         <div>
@@ -13,15 +15,15 @@
         <div class="card">
                   <div v-for="(num,key) in item.tag" :key="key" :class=" key | classCard" v-if="num ===1">{{key | formatCard}}</div>
                   
-            </div>
+        </div>
       </li>
-     
+    
     </ul>
+    </Scroller>
 	</div>
 </template>
 
 <script>
-import BScroll from "better-scroll"
 
 export default {
   name:"CiList",
@@ -29,19 +31,24 @@ export default {
   props:{},
   data(){
     return {
-      cinemaList:[]
+      cinemaList:[],
+      isLoading:true,
+      prevCityId : -1
     }
   },
-  mounted(){
-    this.axios.get('/api/cinemaList?cityId=10').then((res)=>{
-      var msg = res.data.msg
-      if(msg === 'ok'){
-        this.cinemaList=res.data.data.cinemas
-        this,$nextTick(()=>{
-          new BScroll()
-        })
-      }
-    })
+  activated(){
+   var cityId = this.$store.state.city.id;
+        if( this.prevCityId === cityId ){ return; }
+        this.isLoading = true;
+
+        this.axios.get('/api/cinemaList?cityId='+cityId).then((res)=>{
+            var msg = res.data.msg;
+            if(msg === 'ok'){
+                this.cinemaList = res.data.data.cinemas;
+                this.isLoading = false;
+                this.prevCityId = cityId
+            }
+        });
   },
   filters:{
     formatCard(key){

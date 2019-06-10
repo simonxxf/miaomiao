@@ -29,13 +29,18 @@ export default {
   name:"NowPlaying",
   components:{},
   props:{},
-  mounted(){
-    this.axios.get('/api/movieOnInfoList?cityId=11').then((res) =>{
+  activated(){
+    var cityId = this.$store.state.city.id
+    if(this.prevCityId === cityId){{return;}}//判断上一次的城市id与当前城市id是否相同  相同则不刷新 
+    this.isLoading = true
+    console.log(123)
+    this.axios.get('/api/movieOnInfoList?cityId='+cityId).then((res) =>{
       
       var msg =res.data.msg
       if(msg ==="ok"){
         this.isLoading = false
-        this.movieList=res.data.data.movieList
+        this.movieList=res.data.data.movieList,
+        this.prevCityId = cityId
         // this.$nextTick(()=>{
         //  var scroll= new BScroll(this.$refs.movie_body,{
         //     tap:true,
@@ -71,7 +76,8 @@ export default {
     return {
       movieList:[],
       pullDownMsg:"",
-      isLoading:true
+      isLoading:true,
+      prevCityId:-1 //假设上一次的城市id
     }
   },
   methods:{
