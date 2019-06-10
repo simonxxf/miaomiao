@@ -1,5 +1,5 @@
 <template>
-  <div class="cinema_body" ref="cinema_body">
+  <div class="cinema_body" >
     <Loading v-if="isLoading"></Loading>
     <Scroller v-else>
     <ul>
@@ -13,7 +13,7 @@
           <span>{{item.distance}}</span>
         </div>
         <div class="card">
-                  <div v-for="(num,key) in item.tag" :key="key" :class=" key | classCard" v-if="num ===1">{{key | formatCard}}</div>
+            <div v-for="(num,key) in item.tag" :key="key" :class=" key | classCard" v-if="num ===1">{{key | formatCard}}</div>
                   
         </div>
       </li>
@@ -37,16 +37,16 @@ export default {
     }
   },
   activated(){
-   var cityId = this.$store.state.city.id;
+    var cityId = this.$store.state.city.id;
         if( this.prevCityId === cityId ){ return; }
         this.isLoading = true;
 
-        this.axios.get('/api/cinemaList?cityId='+cityId).then((res)=>{
+        this.axios.get('/api/cinemaList?cityId=10').then((res)=>{
             var msg = res.data.msg;
             if(msg === 'ok'){
                 this.cinemaList = res.data.data.cinemas;
                 this.isLoading = false;
-                this.prevCityId = cityId
+                 this.prevCityId = cityId
             }
         });
   },
