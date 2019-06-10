@@ -1,9 +1,9 @@
 <template>
-  <div class="cinema_body">
+  <div class="cinema_body" ref="cinema_body">
     <ul>
       <li v-for="item in cinemaList" :key="item.id">
         <div>
-          <span>{{item.nm}})</span>
+          <span>{{item.nm}}</span>
           <span class="q"><span class="price">{{item.sellPrice}}</span> 元起</span>
         </div>
         <div class="address">
@@ -21,6 +21,8 @@
 </template>
 
 <script>
+import BScroll from "better-scroll"
+
 export default {
   name:"CiList",
   components:{},
@@ -35,6 +37,9 @@ export default {
       var msg = res.data.msg
       if(msg === 'ok'){
         this.cinemaList=res.data.data.cinemas
+        this,$nextTick(()=>{
+          new BScroll()
+        })
       }
     })
   },
