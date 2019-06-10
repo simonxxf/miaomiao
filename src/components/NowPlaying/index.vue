@@ -1,6 +1,7 @@
 <template>
   <div class="movie_body" ref="movie_body">
-    <Scroller :handleToScroll="handleToScroll" :handleToTouchEnd="handleToTouchEnd">
+    <Loading v-if="isLoading"></Loading>
+    <Scroller v-else :handleToScroll="handleToScroll" :handleToTouchEnd="handleToTouchEnd">
       <ul>
         <li class="pullDown">{{pullDownMsg}}</li>
         <li v-for="item in movieList" :key="item.id">
@@ -33,6 +34,7 @@ export default {
       
       var msg =res.data.msg
       if(msg ==="ok"){
+        this.isLoading = false
         this.movieList=res.data.data.movieList
         // this.$nextTick(()=>{
         //  var scroll= new BScroll(this.$refs.movie_body,{
@@ -68,7 +70,8 @@ export default {
   data(){
     return {
       movieList:[],
-      pullDownMsg:""
+      pullDownMsg:"",
+      isLoading:true
     }
   },
   methods:{
