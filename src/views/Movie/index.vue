@@ -25,7 +25,8 @@
 
 <script>
 import Header from '@/components/Header';
-import TabBar from '@/components/TabBar'
+import TabBar from '@/components/TabBar';
+import {messsgeBox} from "@/components/JS"
 export default {
   name:"Movie",
   components:{

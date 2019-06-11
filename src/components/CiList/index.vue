@@ -33,22 +33,36 @@ export default {
     return {
       cinemaList:[],
       isLoading:true,
-      prevCityId : -1
+      prevCityId : -1,
+      cityId: ''
+    }
+
+  },
+  watch:{
+    cityId () {
+      this.getData()
     }
   },
-  activated(){
-    var cityId = this.$store.state.city.id;
-        if( this.prevCityId === cityId ){ return; }
+ mounted(){
+    this.getData()
+  },
+  methods: {
+    getData () {
+      console.log('this.$store.state.city.id', this.$store.state.city.id)
+      this.cityId = this.$store.state.city.id;
+      console.log('this.cityId', this.$store.state.city.id)
+        if( this.prevCityId ===this.cityId ){ return; }
         this.isLoading = true;
 
-        this.axios.get('/api/cinemaList?cityId=10').then((res)=>{
+        this.axios.get('/api/cinemaList?cityId='+this.cityId).then((res)=>{
             var msg = res.data.msg;
             if(msg === 'ok'){
                 this.cinemaList = res.data.data.cinemas;
                 this.isLoading = false;
-                 this.prevCityId = cityId
+                 this.prevCityId = this.cityId
             }
         });
+    }
   },
   filters:{
     formatCard(key){
