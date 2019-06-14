@@ -19,7 +19,14 @@ export default {
     }
   },
   mounted(){
-    messageBox()
+    messageBox({
+      title : '定位',
+      content : '沈阳',
+      cancel : '取消',
+      ok : '切换定位',
+      handleCancel : null,
+      handleOk : null
+    })
   }
 }
 </script>

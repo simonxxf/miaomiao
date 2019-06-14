@@ -42,4 +42,4 @@ export var messageBox = (function(){
     document.body.appendChild( vm.$el );
   }
 
-})();
+})();  
