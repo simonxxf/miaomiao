@@ -26,7 +26,7 @@
 <script>
 import Header from '@/components/Header';
 import TabBar from '@/components/TabBar';
-import {messsgeBox} from "@/components/JS"
+import { messageBox } from "../../components/JS/index.js"
 export default {
   name:"Movie",
   components:{
@@ -38,6 +38,38 @@ export default {
     return {
     }
   },
+  mounted(){
+    setTimeout(()=>{
+        this.axios.get('/api/getLocation').then((res)=>{
+        var msg = res.data.msg
+
+        if(msg === "ok"){
+          const nm = res.data.data.nm
+          const id = res.data.data.id
+
+          console.log(this.$store.state.city.id,id) //状态管理中的id 是字符串  === 会比较类型   == 就不用检测类型
+          if(this.$store.state.city.id == id){
+            return
+          }else{
+              messageBox({
+              title:"定位",
+              content:nm,
+              cancle:"取消",
+              ok:"切换定位",
+              handleOk(){
+                console.log(2)
+                window.localStorage.setItem('nowNm',nm) //把定位到的城市 存到vuex 
+                window.localStorage.setItem('nowId',id)
+                window.location.reload() //重新加载页面
+              }
+
+            })
+          }
+         
+        }
+      })
+    },3000)
+  }
 }
 </script>
 <style scoped>

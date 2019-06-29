@@ -3,32 +3,24 @@
     <h2>{{title}}</h2>
     <p>{{content}}</p>
     <div>
-      <div>{{cancle}}</div>
-       <div>{{ok}}</div>
+      <div @click="handleCancle">{{cancle}}</div>
+       <div  @click="handleOk">{{ok}}</div>
     </div>
   </div>
   
 </template>
 
 <script>
-export default {
-  components:{},
-  props:{},
-  data(){
-    return {
-    }
-  },
-  mounted(){
-    messageBox({
-      title : '定位',
-      content : '沈阳',
-      cancel : '取消',
-      ok : '切换定位',
-      handleCancel : null,
-      handleOk : null
-    })
+  export default {
+    components:{},
+    name :"MessageBox",
+    props:{},
+    data(){
+      return {
+      }
+    },
+    
   }
-}
 </script>
 <style  scoped>
     .messageBox{ width:200px; height:120px; border:1px #ccc solid; border-radius: 4px; background:white; box-shadow: 3px 3px 3px 3px #ccc; position: absolute; left: 50%; top: 50%; margin:-60px 0 0 -100px;}
